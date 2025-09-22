@@ -178,6 +178,7 @@ const GlassContainer = forwardRef<
     const [shaderMapUrl, setShaderMapUrl] = useState<string>("")
 
     const isFirefox = navigator.userAgent.toLowerCase().includes("firefox")
+    const isSafari = navigator.userAgent.toLowerCase().includes("safari") && !navigator.userAgent.toLowerCase().includes("chrome")
 
     // Generate shader displacement map when in shader mode
     useEffect(() => {
@@ -188,7 +189,7 @@ const GlassContainer = forwardRef<
     }, [mode, glassSize.width, glassSize.height])
 
     const backdropStyle = {
-      filter: isFirefox ? null : `url(#${filterId})`,
+      filter: (isFirefox || isSafari) ? null : `url(#${filterId})`,
       backdropFilter: `blur(${(overLight ? 12 : 4) + blurAmount * 32}px) saturate(${saturation}%)`,
     }
 
