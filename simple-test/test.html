@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Safari Displacement Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="react-root"></div>
+    </div>
+    
+    <script type="module">
+        import React, { useState, useEffect } from "https://esm.sh/react@18"
+        import ReactDOM from "https://esm.sh/react-dom@18/client"
+        
+        // Simple test component to verify Safari displacement works
+        function SafariTest() {
+            const [isSafari, setIsSafari] = useState(false)
+            const [isFirefox, setIsFirefox] = useState(false)
+            const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+            
+            useEffect(() => {
+                if (typeof navigator !== "undefined") {
+                    setIsFirefox(navigator.userAgent.toLowerCase().includes("firefox"))
+                    setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
+                }
+            }, [])
+            
+            const handleMouseMove = (e) => {
+                setMousePos({ x: e.clientX, y: e.clientY })
+            }
+            
+            return React.createElement("div", {
+                style: {
+                    padding: "40px",
+                    borderRadius: "20px",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    backdropFilter: "blur(20px)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    position: "relative"
+                },
+                onMouseMove: handleMouseMove
+            }, [
+                React.createElement("h2", { key: "title" }, "Safari Displacement Test"),
+                React.createElement("p", { key: "browser" }, 
+                    `Detected browser: ${isSafari ? "Safari" : isFirefox ? "Firefox" : "Chromium"}`
+                ),
+                React.createElement("p", { key: "mouse" }, 
+                    `Mouse: ${mousePos.x}, ${mousePos.y}`
+                ),
+                React.createElement("div", {
+                    key: "test-element",
+                    style: {
+                        width: "200px",
+                        height: "100px",
+                        background: "rgba(255, 255, 255, 0.2)",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "20px 0",
+                        transform: isSafari ? `translate(${mousePos.x * 0.01}px, ${mousePos.y * 0.01}px)` : "none",
+                        transition: "transform 0.1s ease",
+                        backdropFilter: "blur(10px)",
+                        filter: isSafari ? `blur(1px)` : "none"
+                    }
+                }, "Safari Effect Test")
+            ])
+        }
+        
+        const root = ReactDOM.createRoot(document.getElementById("react-root"))
+        root.render(React.createElement(SafariTest))
+    </script>
+</body>
+</html>
