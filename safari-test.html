@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safari Displacement Effect Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        .browser-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .glass-demo {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .glass-demo:hover {
+            transform: scale(1.02);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .safari-specific {
+            background: rgba(255, 165, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+        
+        .firefox-specific {
+            background: rgba(255, 69, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+        
+        .chrome-specific {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Safari Displacement Effect Test</h1>
+        
+        <div class="browser-info">
+            <h2>Browser Detection</h2>
+            <p id="browser-type">Detecting browser...</p>
+            <p id="user-agent" style="font-size: 12px; word-break: break-all; opacity: 0.7;"></p>
+        </div>
+        
+        <div class="glass-demo">
+            <h3>Glass Effect Demo</h3>
+            <p>This element demonstrates the glass effect with browser-specific optimizations:</p>
+            
+            <div class="chrome-specific" id="chrome-info" style="display: none;">
+                ✅ <strong>Chromium browsers:</strong> Full SVG feDisplacementMap support with advanced chromatic aberration effects.
+            </div>
+            
+            <div class="safari-specific" id="safari-info" style="display: none;">
+                🔶 <strong>Safari:</strong> Using feConvolveMatrix-based displacement effect as fallback for better compatibility.
+            </div>
+            
+            <div class="firefox-specific" id="firefox-info" style="display: none;">
+                ❌ <strong>Firefox:</strong> Displacement effects are disabled due to limited SVG filter support.
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Testing Instructions</h3>
+            <p>This page tests the browser-specific implementations of the liquid glass displacement effect:</p>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li><strong>Chrome/Edge/Opera:</strong> Should see full displacement effects with chromatic aberration</li>
+                <li><strong>Safari:</strong> Should see experimental displacement effects using alternative SVG filters</li>
+                <li><strong>Firefox:</strong> Will see glass blur effects but no edge displacement</li>
+            </ul>
+            <p style="margin-top: 20px;">
+                <strong>Next Step:</strong> Test the React component implementation in your actual application.
+                The browser detection and fallback logic has been implemented in the library.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function detectBrowser() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isFirefox = userAgent.includes('firefox');
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            const isChrome = userAgent.includes('chrome') && !userAgent.includes('edge');
+            const isEdge = userAgent.includes('edge');
+            
+            let browserName = 'Unknown';
+            let browserClass = '';
+            
+            if (isFirefox) {
+                browserName = 'Firefox';
+                browserClass = 'firefox';
+                document.getElementById('firefox-info').style.display = 'block';
+            } else if (isSafari) {
+                browserName = 'Safari';
+                browserClass = 'safari';
+                document.getElementById('safari-info').style.display = 'block';
+            } else if (isEdge) {
+                browserName = 'Microsoft Edge';
+                browserClass = 'chrome';
+                document.getElementById('chrome-info').style.display = 'block';
+            } else if (isChrome) {
+                browserName = 'Google Chrome';
+                browserClass = 'chrome';
+                document.getElementById('chrome-info').style.display = 'block';
+            } else {
+                browserName = 'Chromium-based browser';
+                browserClass = 'chrome';
+                document.getElementById('chrome-info').style.display = 'block';
+            }
+            
+            document.getElementById('browser-type').textContent = `Detected: ${browserName}`;
+            document.getElementById('user-agent').textContent = `User Agent: ${navigator.userAgent}`;
+            
+            // Update page styling based on browser
+            document.body.className = browserClass;
+        }
+        
+        // Run detection when page loads
+        document.addEventListener('DOMContentLoaded', detectBrowser);
+    </script>
+</body>
+</html>
