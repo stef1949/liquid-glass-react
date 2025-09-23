@@ -24,7 +24,7 @@ Card Example              |  Button Example
 - Configurable chromatic aberration
 - Configurable elasticity, to mimic Apple's "liquid" feel
 
-> **⚠️ NOTE:** Safari and Firefox only partially support the effect (displacement will not be visible)
+> **⚠️ NOTE:** Firefox only partially supports the effect (displacement will not be visible). Safari now has basic support.
 
 ## 🚀 Usage
 

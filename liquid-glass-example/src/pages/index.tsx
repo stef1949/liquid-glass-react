@@ -158,6 +158,7 @@ export default function Home() {
           <p className="text-white/60 text-sm">Liquid Glass container effect for React. With settings and effects and stuff.</p>
 
           <p className="font-semibold text-yellow-300 text-xs mt-2 leading-snug">⚠️ Firefox doesn't support edge refraction. Safari support is experimental.</p>
+
         </div>
 
         {/* Tab Switcher */}

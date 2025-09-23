@@ -288,14 +288,8 @@ const GlassContainer = forwardRef<
     const [isFirefox, setIsFirefox] = useState(false)
     const [isSafari, setIsSafari] = useState(false)
     const isNonChromium = isFirefox || isSafari
-
-    // Browser detection on client side only
-    useEffect(() => {
-      if (typeof navigator !== 'undefined') {
-        setIsFirefox(navigator.userAgent.toLowerCase().includes("firefox"))
-        setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent))
-      }
-    }, [])
+    const isFirefox = navigator.userAgent.toLowerCase().includes("firefox")
+    const isSafari = navigator.userAgent.toLowerCase().includes("safari") && !navigator.userAgent.toLowerCase().includes("chrome")
 
     // Generate shader displacement map when in shader mode
     useEffect(() => {
@@ -306,7 +300,7 @@ const GlassContainer = forwardRef<
     }, [mode, glassSize.width, glassSize.height])
 
     const backdropStyle = {
-      filter: isSafari ? `url(#${filterId})` : isFirefox ? null : `url(#${filterId})`,
+      filter: (isFirefox || isSafari) ? null : `url(#${filterId})`,
       backdropFilter: `blur(${(overLight ? 12 : 4) + blurAmount * 32}px) saturate(${saturation}%)`,
     }
 
